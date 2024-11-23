@@ -13,7 +13,7 @@ const Logo = () => {
       xmlSpace="preserve"
     >
       <style type="text/css">
-        {`.st0 { fill-rule: evenodd; clip-rule: evenodd; fill: #404041; }
+        {`.st0 { fill-rule: evenodd; clip-rule: evenodd; fill: #ffff; }
           .st1 { fill-rule: evenodd; clip-rule: evenodd; fill: #0090BA; }`}
       </style>
       <g>

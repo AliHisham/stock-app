@@ -4,6 +4,7 @@ import useNasdaqStocks from "../utilis/useNasdaqStocks";
 import Stock from "../component-atoms/Stock";
 import Loading from "../component-atoms/Loading";
 import Header from "../component-atoms/Header";
+import ToolBar from "../component-atoms/ToolBar";
 
 const Stocks = () => {
   const [searchValue, setSearchValue] = useState<string>("");
@@ -39,12 +40,12 @@ const Stocks = () => {
   );
 
   return (
-    <div className="flex flex-col gap-3 rounded-md">
+    <div className="flex flex-col gap-3 rounded-md w-full min-h-screen">
       <Header handleSearchValue={handleSearchValue} />
       {error && <div>{error}</div>}
 
       {!error && (
-        <div className="flex flex-wrap p-4 gap-3 justify-center">
+        <div className="flex flex-wrap p-4 gap-3 justify-center items-center w-full ">
           {stocks && stocks.length
             ? stocks.map((stock, index) => {
                 if (index + 1 == stocks.length) {
@@ -67,6 +68,7 @@ const Stocks = () => {
         </div>
       )}
       {loading && <Loading />}
+      <ToolBar />
     </div>
   );
 };

@@ -28,11 +28,10 @@ const useNasdaqStocks = (searchValue: string) => {
 
   const apiKey = "FxQAWoJ4AUby70HhdoMB_LUTI849nAEW";
 
-  const getAllStocks = (nextOne: boolean) => {
+  const getAllStocks = async (nextOne: boolean) => {
     if (!nextOne) {
       setStocks([]);
     }
-
     const __url = nextOne ? next_url : url;
     console.log(__url, "testing testing the url");
     if (__url) {

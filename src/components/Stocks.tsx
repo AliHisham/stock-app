@@ -42,6 +42,7 @@ const Stocks = () => {
         onChange={(e) => handleSearchValue(e.target.value)}
         placeholder="write a stock name..."
         type="text"
+        name="search"
       />
       <div className="flex flex-wrap p-4 gap-3 justify-center">
         {stocks &&

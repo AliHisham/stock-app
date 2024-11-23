@@ -1,5 +1,13 @@
 {
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "CommonJS", // Jest uses CommonJS module system
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "types": ["vites/globals"]
+  },
   "files": [],
+
   "references": [
     { "path": "./tsconfig.app.json" },
     { "path": "./tsconfig.node.json" }

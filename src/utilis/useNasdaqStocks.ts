@@ -16,10 +16,10 @@ type Stock = {
   type: string;
 };
 
-const useNasdaqStocks = () => {
+const useNasdaqStocks = (searchValue: string) => {
   const [stocks, setStocks] = useState<Stock[]>([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [next_url, setNextUrl] = useState<string>("");
   const [visible, setVisibile] = useState(false);
 
   const [url, setUrl] = useState<string>(
@@ -28,26 +28,35 @@ const useNasdaqStocks = () => {
 
   const apiKey = "FxQAWoJ4AUby70HhdoMB_LUTI849nAEW";
 
-  const getAllStocks = () => {
-    if (url) {
-      console.log(url, "url--1");
-      console.log(visible, "visible--1");
+  const getAllStocks = (nextOne: boolean) => {
+    if (!nextOne) {
+      setStocks([]);
+    }
+
+    const __url = nextOne ? next_url : url;
+    console.log(__url, "testing testing the url");
+    if (__url) {
       axios({
         method: "GET",
-        url: url,
+        url: __url,
         params: {
+          search: searchValue,
           apiKey: apiKey,
-          limit: 70,
+          limit: 100,
           active: true,
         },
       })
         .then((res) => {
           const { results, next_url } = res.data;
-          setStocks((prev) => [...prev, ...results]);
-          if (next_url) {
-            setUrl(next_url);
+          if (results && results.length) {
+            setStocks((prev) => [...prev, ...results]);
           } else {
-            setUrl("");
+            setStocks([]);
+          }
+          if (next_url) {
+            setNextUrl(next_url);
+          } else {
+            setNextUrl("");
           }
           setVisibile(false);
         })
@@ -59,16 +68,16 @@ const useNasdaqStocks = () => {
 
   useEffect(() => {
     setLoading(true);
-    getAllStocks();
+    getAllStocks(false);
     setLoading(false);
-  }, []);
+  }, [searchValue]);
 
   useEffect(() => {
     if (!visible) return;
-    getAllStocks();
+    getAllStocks(true);
   }, [visible]);
 
-  return { stocks, loading, setVisibile };
+  return { stocks, loading, setVisibile, next_url };
 };
 
 export default useNasdaqStocks;

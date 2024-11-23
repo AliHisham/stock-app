@@ -21,6 +21,7 @@ const useNasdaqStocks = (searchValue: string) => {
   const [loading, setLoading] = useState(false);
   const [next_url, setNextUrl] = useState<string>("");
   const [visible, setVisibile] = useState(false);
+  const [error, setError] = useState<string>("");
 
   const [url, setUrl] = useState<string>(
     "https://api.polygon.io/v3/reference/tickers"
@@ -29,6 +30,7 @@ const useNasdaqStocks = (searchValue: string) => {
   const apiKey = "FxQAWoJ4AUby70HhdoMB_LUTI849nAEW";
 
   const getAllStocks = async (nextOne: boolean) => {
+    setLoading(true);
     if (!nextOne) {
       setStocks([]);
     }
@@ -46,7 +48,10 @@ const useNasdaqStocks = (searchValue: string) => {
         },
       })
         .then((res) => {
+          console.log("testing before setting the loading value to be false");
           const { results, next_url } = res.data;
+          setLoading(false);
+          setError("");
           if (results && results.length) {
             setStocks((prev) => [...prev, ...results]);
           } else {
@@ -60,15 +65,21 @@ const useNasdaqStocks = (searchValue: string) => {
           setVisibile(false);
         })
         .catch((err) => {
+          setLoading(false);
+          if (err && err.status == 429) {
+            setError("sorry you have exceeded the rate limit!");
+          } else {
+            setError("Something went wrong!");
+          }
           console.log(err, "logging for now!");
         });
+    } else {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
-    setLoading(true);
     getAllStocks(false);
-    setLoading(false);
   }, [searchValue]);
 
   useEffect(() => {
@@ -76,7 +87,7 @@ const useNasdaqStocks = (searchValue: string) => {
     getAllStocks(true);
   }, [visible]);
 
-  return { stocks, loading, setVisibile, next_url };
+  return { stocks, loading, setVisibile, next_url, error };
 };
 
 export default useNasdaqStocks;

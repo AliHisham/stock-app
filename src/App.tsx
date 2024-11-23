@@ -4,7 +4,7 @@ import "./App.css";
 function App() {
   return (
     <>
-      <div className="bg-green-300">
+      <div className="bg-green-300 rounded-md">
         <Stocks />
       </div>
     </>

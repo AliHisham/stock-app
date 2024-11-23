@@ -2,11 +2,13 @@ import { useRef, useCallback, useState } from "react";
 
 import useNasdaqStocks from "../utilis/useNasdaqStocks";
 import Stock from "../component-atoms/Stock";
+import Loading from "../component-atoms/Loading";
+import Header from "../component-atoms/Header";
 
 const Stocks = () => {
   const [searchValue, setSearchValue] = useState<string>("");
   const searchDebounce = useRef<any>(null);
-  const { stocks, loading, setVisibile, next_url } =
+  const { stocks, loading, setVisibile, next_url, error } =
     useNasdaqStocks(searchValue);
 
   const observer = useRef<IntersectionObserver | null>(null);
@@ -33,34 +35,38 @@ const Stocks = () => {
       if (node) observer.current.observe(node);
     },
 
-    [loading, next_url]
+    [next_url]
   );
 
   return (
-    <div className="flex flex-col gap-3">
-      <input
-        onChange={(e) => handleSearchValue(e.target.value)}
-        placeholder="write a stock name..."
-        type="text"
-        name="search"
-      />
-      <div className="flex flex-wrap p-4 gap-3 justify-center">
-        {stocks &&
-          stocks.length &&
-          stocks.map((stock, index) => {
-            if (index + 1 == stocks.length) {
-              return (
-                <div key={index} ref={lastTickerElement}>
-                  <Stock name={stock.name} ticker={stock.ticker} />
-                </div>
-              );
-            } else {
-              return (
-                <Stock key={index} name={stock.name} ticker={stock.ticker} />
-              );
-            }
-          })}
-      </div>
+    <div className="flex flex-col gap-3 rounded-md">
+      <Header handleSearchValue={handleSearchValue} />
+      {error && <div>{error}</div>}
+
+      {!error && (
+        <div className="flex flex-wrap p-4 gap-3 justify-center">
+          {stocks && stocks.length
+            ? stocks.map((stock, index) => {
+                if (index + 1 == stocks.length) {
+                  return (
+                    <div key={index} ref={lastTickerElement}>
+                      <Stock name={stock.name} ticker={stock.ticker} />
+                    </div>
+                  );
+                } else {
+                  return (
+                    <Stock
+                      key={index}
+                      name={stock.name}
+                      ticker={stock.ticker}
+                    />
+                  );
+                }
+              })
+            : null}
+        </div>
+      )}
+      {loading && <Loading />}
     </div>
   );
 };

@@ -20,29 +20,55 @@ const useNasdaqStocks = () => {
   const [stocks, setStocks] = useState<Stock[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [visible, setVisibile] = useState(false);
+
+  const [url, setUrl] = useState<string>(
+    "https://api.polygon.io/v3/reference/tickers"
+  );
 
   const apiKey = "FxQAWoJ4AUby70HhdoMB_LUTI849nAEW";
-  const url = `https://api.polygon.io/v3/reference/tickers`;
+
+  const getAllStocks = () => {
+    if (url) {
+      console.log(url, "url--1");
+      console.log(visible, "visible--1");
+      axios({
+        method: "GET",
+        url: url,
+        params: {
+          apiKey: apiKey,
+          limit: 70,
+          active: true,
+        },
+      })
+        .then((res) => {
+          const { results, next_url } = res.data;
+          setStocks((prev) => [...prev, ...results]);
+          if (next_url) {
+            setUrl(next_url);
+          } else {
+            setUrl("");
+          }
+          setVisibile(false);
+        })
+        .catch((err) => {
+          console.log(err, "logging for now!");
+        });
+    }
+  };
 
   useEffect(() => {
-    axios({
-      method: "GET",
-      url: url,
-      params: {
-        apiKey: apiKey,
-        limit: 100,
-        active: true,
-      },
-    })
-      .then((res) => {
-        setStocks((prev) => [...prev, ...res.data.results]);
-      })
-      .catch((err) => {
-        console.log(err, "logging for now!");
-      });
+    setLoading(true);
+    getAllStocks();
+    setLoading(false);
   }, []);
 
-  return { stocks };
+  useEffect(() => {
+    if (!visible) return;
+    getAllStocks();
+  }, [visible]);
+
+  return { stocks, loading, setVisibile };
 };
 
 export default useNasdaqStocks;

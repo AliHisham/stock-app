@@ -23,11 +23,9 @@ const useNasdaqStocks = (searchValue: string) => {
   const [visible, setVisibile] = useState(false);
   const [error, setError] = useState<string>("");
 
-  const [url, setUrl] = useState<string>(
-    "https://api.polygon.io/v3/reference/tickers"
-  );
+  const url = import.meta.env.VITE_API_URL;
 
-  const apiKey = "FxQAWoJ4AUby70HhdoMB_LUTI849nAEW";
+  const apiKey = import.meta.env.VITE_API_KEY;
 
   const getAllStocks = async (nextOne: boolean) => {
     setLoading(true);
@@ -35,7 +33,7 @@ const useNasdaqStocks = (searchValue: string) => {
       setStocks([]);
     }
     const __url = nextOne ? next_url : url;
-    console.log(__url, "testing testing the url");
+
     if (__url) {
       axios({
         method: "GET",
@@ -48,7 +46,6 @@ const useNasdaqStocks = (searchValue: string) => {
         },
       })
         .then((res) => {
-          console.log("testing before setting the loading value to be false");
           const { results, next_url } = res.data;
           setLoading(false);
           setError("");
@@ -71,7 +68,6 @@ const useNasdaqStocks = (searchValue: string) => {
           } else {
             setError("Something went wrong!");
           }
-          console.log(err, "logging for now!");
         });
     } else {
       setLoading(false);

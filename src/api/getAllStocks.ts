@@ -1,7 +1,6 @@
 import axios from "axios";
 
 export const getAllStocks = async (search: string): Promise<any[]> => {
-  console.log(search, "testing the search value");
   const url = `https://api.polygon.io/v3/reference/tickers?search=${search}&active=true&apiKey=FxQAWoJ4AUby70HhdoMB_LUTI849nAEW`;
   try {
     const response = await axios({

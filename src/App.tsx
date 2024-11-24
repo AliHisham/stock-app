@@ -1,14 +1,13 @@
-import Stocks from "./components/Stocks";
 import "./App.css";
 import DarkLightThemeProvider from "./Providers/DarkThemeProvide";
+
+import NasdaqWrapper from "./components/NasdaqWrapper";
 
 function App() {
   return (
     <>
       <DarkLightThemeProvider>
-        <div className="dark:bg-gray-900 bg-white rounded-md w-full ">
-          <Stocks />
-        </div>
+        <NasdaqWrapper />
       </DarkLightThemeProvider>
     </>
   );

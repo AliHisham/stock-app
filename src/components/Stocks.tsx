@@ -18,17 +18,15 @@ const Stocks = () => {
     clearTimeout(searchDebounce.current);
     searchDebounce.current = setTimeout(() => {
       setSearchValue(inputValue);
-    }, 1000);
+    }, 700);
   };
 
   const lastTickerElement = useCallback(
     (node: any) => {
       if (loading) return;
-
       if (observer.current) observer.current?.disconnect();
       observer.current = new IntersectionObserver((enteries) => {
         if (enteries[0].isIntersecting) {
-          console.log("visible---intersection");
           setVisibile(true);
         }
       });
@@ -40,31 +38,29 @@ const Stocks = () => {
   );
 
   return (
-    <div className="flex flex-col gap-3 rounded-md w-full min-h-screen">
+    <div className="flex flex-col gap-3 rounded-md w-full min-h-screen items-center">
       <Header handleSearchValue={handleSearchValue} />
-      {error && <div>{error}</div>}
+      {error && !loading && <div className="text-white text-2xl">{error}</div>}
 
-      {!error && (
+      {!error && !loading && (
         <div className="flex flex-wrap p-4 gap-3 justify-center items-center w-full ">
-          {stocks && stocks.length
-            ? stocks.map((stock, index) => {
-                if (index + 1 == stocks.length) {
-                  return (
-                    <div key={index} ref={lastTickerElement}>
-                      <Stock name={stock.name} ticker={stock.ticker} />
-                    </div>
-                  );
-                } else {
-                  return (
-                    <Stock
-                      key={index}
-                      name={stock.name}
-                      ticker={stock.ticker}
-                    />
-                  );
-                }
-              })
-            : null}
+          {stocks && stocks.length ? (
+            stocks.map((stock, index) => {
+              if (index + 1 == stocks.length) {
+                return (
+                  <div key={index} ref={lastTickerElement}>
+                    <Stock name={stock.name} ticker={stock.ticker} />
+                  </div>
+                );
+              } else {
+                return (
+                  <Stock key={index} name={stock.name} ticker={stock.ticker} />
+                );
+              }
+            })
+          ) : (
+            <p className="text-white text-2xl">No results found </p>
+          )}
         </div>
       )}
       {loading && <Loading />}

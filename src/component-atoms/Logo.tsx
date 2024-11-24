@@ -1,8 +1,13 @@
-const Logo = () => {
+type LogoProps = {
+  width: number;
+  height: number;
+};
+
+const Logo = ({ width, height }: LogoProps) => {
   return (
     <svg
-      width={100}
-      height={100}
+      width={width}
+      height={height}
       version="1.0"
       id="katman_1"
       xmlns="http://www.w3.org/2000/svg"

@@ -22,7 +22,7 @@ const Stocks = () => {
   };
 
   const lastTickerElement = useCallback(
-    (node: any) => {
+    (node: HTMLDivElement) => {
       if (loading) return;
       if (observer.current) observer.current?.disconnect();
       observer.current = new IntersectionObserver((enteries) => {
@@ -40,7 +40,9 @@ const Stocks = () => {
   return (
     <div className="flex flex-col gap-3 rounded-md w-full min-h-screen items-center">
       <Header handleSearchValue={handleSearchValue} />
-      {error && !loading && <div className="text-white text-2xl">{error}</div>}
+      {error && !loading && (
+        <div className="dark:text-white text-2xl">{error}</div>
+      )}
 
       {!error && !loading && (
         <div className="flex flex-wrap p-4 gap-3 justify-center items-center w-full ">
@@ -59,7 +61,7 @@ const Stocks = () => {
               }
             })
           ) : (
-            <p className="text-white text-2xl">No results found </p>
+            <p className="dark:text-white text-2xl">No results found </p>
           )}
         </div>
       )}

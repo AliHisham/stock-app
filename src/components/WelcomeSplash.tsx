@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useRef } from "react";
 import useLocalStorage from "../utilis/useLocaleStorage";
 
 import Logo from "../component-atoms/Logo";
